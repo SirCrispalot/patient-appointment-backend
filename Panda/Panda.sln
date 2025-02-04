@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.WebApi", "Panda.WebApi\Panda.WebApi.csproj", "{9F851D6D-B9C2-4BFE-9A53-D1E072CDDD8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Model", "Panda.Model\Panda.Model.csproj", "{B471A213-07D6-463E-AA9D-8B4004438424}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Tests", "Panda.Tests\Panda.Tests.csproj", "{F3A83E53-8348-482C-AF57-856182FEFC50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Services", "Panda.Services\Panda.Services.csproj", "{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F851D6D-B9C2-4BFE-9A53-D1E072CDDD8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F851D6D-B9C2-4BFE-9A53-D1E072CDDD8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F851D6D-B9C2-4BFE-9A53-D1E072CDDD8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F851D6D-B9C2-4BFE-9A53-D1E072CDDD8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B471A213-07D6-463E-AA9D-8B4004438424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B471A213-07D6-463E-AA9D-8B4004438424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B471A213-07D6-463E-AA9D-8B4004438424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B471A213-07D6-463E-AA9D-8B4004438424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A83E53-8348-482C-AF57-856182FEFC50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A83E53-8348-482C-AF57-856182FEFC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A83E53-8348-482C-AF57-856182FEFC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A83E53-8348-482C-AF57-856182FEFC50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
