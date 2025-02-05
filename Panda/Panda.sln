@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Tests", "Panda.Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Services", "Panda.Services\Panda.Services.csproj", "{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.Repository", "Panda.Repository\Panda.Repository.csproj", "{BD5B57E0-5CA9-493C-B44C-35F7AE431621}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panda.ClientModel", "Panda.ClientModel\Panda.ClientModel.csproj", "{B47AF6F1-4F57-485F-A76C-80D3B56BE0B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2739B7F2-7797-4067-A9D0-D6F5BB8C2FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5B57E0-5CA9-493C-B44C-35F7AE431621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5B57E0-5CA9-493C-B44C-35F7AE431621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5B57E0-5CA9-493C-B44C-35F7AE431621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5B57E0-5CA9-493C-B44C-35F7AE431621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B47AF6F1-4F57-485F-A76C-80D3B56BE0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B47AF6F1-4F57-485F-A76C-80D3B56BE0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B47AF6F1-4F57-485F-A76C-80D3B56BE0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B47AF6F1-4F57-485F-A76C-80D3B56BE0B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

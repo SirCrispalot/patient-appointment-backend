@@ -1,12 +1,44 @@
-Patients
+Assumptions
+- PANDA is not the master for patient identifiers
 
+Patients
+- Create patient with POST, return 201
+- Update existing patient with PUT, return 200
+- Delete existing patient with DELETE, return 200
+- Get existing patient with GET, return 200
+- Get nonexistent patient with GET, return 404
+- Create patient with POST where identifier already exists, return 500
+- Create patient with POST where NHS number invalid, return 400
+- Create patient with POST where postcode format invalid and cannot be coerced, return 400
+- Update nonexistent patient with PUT, patient is created and returns 201
+- Delete nonexistent patient with DELETE, return 404 or 200?
 
 Appointments
+- Create appointment with POST for existing patient, return 201
+- Create appointment with POST for nonexistent patient, return 404 or 500
+- Get existing appointment with GET, return 200
+- Get nonexistent appointment with GET, return 404
+- Get appointment for nonexistent patient with GET, return 404
+- Update existing appointment with PUT, return 200
+- Update nonexistent appointment with PUT, appointment is created and returns 201
+- Update nonexistent appointment for nonexistent patient with PUT, return 404 or 500
+- Delete existing appointment with DELETE, return 200
+- Delete nonexistent appointment with DELETE, return 404 or 200?
+- Cancel existing appointment with PATCH/PUT, return 200
+- Cancel nonexistent appointment with PATCH/PUT, appointment is created and cancelled and returns 201?
 
 Reports
+- Get missed appointment trend data with GET, with params, return 200
 
 Postcodes
+- Postcodes must be coerced into correct format (unit test this)
 
 NHS Numbers
+- NHS numbers must be checksum validated (unit test this)
 
 Patient Names
+- Patient names must be GDPR compliant
+- API must accept full unicode data set?  Is this enough?
+
+Dates and times
+- Must be timezone aware - store everything as UTC?
