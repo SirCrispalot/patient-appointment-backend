@@ -1,4 +1,8 @@
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Panda.Repository;
+using Panda.Repository.EntityFramework;
+using Panda.Services;
 
 namespace Panda.WebApi
 {
@@ -19,6 +23,9 @@ namespace Panda.WebApi
                     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 });
+            builder.Services.AddScoped<IPandaRepository, PandaRepository>();
+            builder.Services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
 
         var app = builder.Build();
 

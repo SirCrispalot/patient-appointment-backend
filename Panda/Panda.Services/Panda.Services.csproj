@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Panda.ClientModel\Panda.ClientModel.csproj" />
+    <ProjectReference Include="..\Panda.Repository\Panda.Repository.csproj" />
+  </ItemGroup>
+
 </Project>

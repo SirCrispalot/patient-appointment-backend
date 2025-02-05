@@ -2,4 +2,5 @@
 
 public class Clinician
 {
+    public int Id { get; set; }
 }

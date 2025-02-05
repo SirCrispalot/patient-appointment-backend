@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Panda.ClientModel;
+using Panda.Services;
 
 namespace Panda.WebApi.Controllers
 {
@@ -7,10 +8,12 @@ namespace Panda.WebApi.Controllers
     public class PatientController : ControllerBase
     {
         private readonly ILogger<PatientController> _logger;
+        private IPatientService _patientService;
 
-        public PatientController(ILogger<PatientController> logger)
+        public PatientController(ILogger<PatientController> logger, IPatientService patientService)
         {
             _logger = logger;
+            _patientService = patientService;
         }
 
         /// <summary>
@@ -18,15 +21,19 @@ namespace Panda.WebApi.Controllers
         /// </summary>
         [HttpGet]
         [Route("patient/{id}")]
-        public async Task<Patient> Get(string id, CancellationToken cancellationToken)
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Patient>> Get(string id, CancellationToken cancellationToken)
         {
-            return new Patient
+            var patient = await _patientService.GetPatientById(id, cancellationToken);
+
+            if (patient == null)
             {
-                Identifier = id,
-                Forename = "Xav",
-                Surname = "Smith",
-                DateOfBirth = new DateTime(2009, 10, 29)
-            };
+                return NotFound($"Patient with id {id} not found.");
+            }
+
+            return Ok(patient);
         }
 
         /// <summary>
