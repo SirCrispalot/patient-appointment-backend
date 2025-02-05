@@ -20,7 +20,13 @@ namespace Panda.WebApi.Controllers
         [Route("patient/{id}")]
         public async Task<Patient> Get(string id, CancellationToken cancellationToken)
         {
-            return new Patient { Identifier = id };
+            return new Patient
+            {
+                Identifier = id,
+                Forename = "Xav",
+                Surname = "Smith",
+                DateOfBirth = new DateTime(2009, 10, 29)
+            };
         }
 
         /// <summary>
