@@ -13,5 +13,13 @@ namespace Panda.Repository
         public DbSet<Patient> Patients { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    //modelBuilder.Entity<Patient>(entity =>
+        //    //{
+        //    //    entity.Property(patient => patient.Id).ValueGeneratedOnAdd().HasColumnType("int").HasColumnOrder(1);
+        //    //});
+        //}
     }
 }

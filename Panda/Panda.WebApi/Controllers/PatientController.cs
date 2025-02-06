@@ -24,7 +24,7 @@ namespace Panda.WebApi.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Patient>> Get(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<Patient>> Get(int id, CancellationToken cancellationToken)
         {
             var patient = await _patientService.GetPatientById(id, cancellationToken);
 
@@ -37,13 +37,38 @@ namespace Panda.WebApi.Controllers
         }
 
         /// <summary>
+        /// Gets a patient by NHS number
+        /// </summary>
+        [HttpGet]
+        [Route("patient/nhs-number/{nhsNumber}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Patient>> Get(string nhsNumber, CancellationToken cancellationToken)
+        {
+            var patient = await _patientService.GetPatientByNhsNumber(nhsNumber, cancellationToken);
+
+            if (patient == null)
+            {
+                return NotFound($"Patient with NHS number {nhsNumber} not found.");
+            }
+
+            return Ok(patient);
+        }
+
+        /// <summary>
         /// Creates a new patient
         /// </summary>
         [HttpPost]
         [Route("patient/")]
-        public async Task Create(Patient patient, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Patient>> Create(Patient patient, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            // TODO: Validation, maybe return 400
+            var newPatient = await _patientService.CreatePatient(patient, cancellationToken);
+
+            return Created($"/patient/{newPatient.Id}", newPatient);
         }
 
         /// <summary>
