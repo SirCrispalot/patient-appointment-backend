@@ -27,7 +27,7 @@ namespace Panda.WebApi
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
 
-        var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -37,7 +37,6 @@ namespace Panda.WebApi
             }
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -12,10 +12,19 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="FluentAssertions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Panda.Repository.EntityFramework\Panda.Repository.EntityFramework.csproj" />
+    <ProjectReference Include="..\Panda.Repository\Panda.Repository.csproj" />
+    <ProjectReference Include="..\Panda.Services\Panda.Services.csproj" />
+    <ProjectReference Include="..\Panda.WebApi\Panda.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
