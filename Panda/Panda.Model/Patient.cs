@@ -23,5 +23,7 @@
         public string Title { get; set; }
 
         public IList<Appointment> Appointments { get; set; }
+
+        public DateTime? DeletedDateTime { get; set; }
     }
 }

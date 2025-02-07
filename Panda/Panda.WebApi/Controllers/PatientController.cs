@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Panda.ClientModel;
+using Panda.Model;
 using Panda.Services;
+using Panda.Services.Exceptions;
+using Patient = Panda.ClientModel.Patient;
 
 namespace Panda.WebApi.Controllers
 {
@@ -66,7 +69,15 @@ namespace Panda.WebApi.Controllers
         public async Task<ActionResult<Patient>> Create(Patient patient, CancellationToken cancellationToken)
         {
             // TODO: Validation, maybe return 400
-            var newPatient = await _patientService.CreatePatient(patient, cancellationToken);
+            Patient newPatient;
+            try
+            {
+                newPatient = await _patientService.CreatePatient(patient, cancellationToken);
+            }
+            catch (PatientAlreadyExistsException exception)
+            {
+                return BadRequest(exception.Message);
+            }
 
             return Created($"/patient/{newPatient.Id}", newPatient);
         }
@@ -75,20 +86,59 @@ namespace Panda.WebApi.Controllers
         /// Updates an existing patient, or creates them if they do not exist
         /// </summary>
         [HttpPut]
-        [Route("patient/{id}")]
-        public async Task Update(string id, Patient patient, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("patient/")]
+        public async Task<ActionResult<Patient>> Update(Patient patient, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            Patient existingPatient = null;
+            if (patient.Id != 0)
+            {
+                existingPatient = await _patientService.GetPatientById(patient.Id, cancellationToken);
+            }
+
+            if (!string.IsNullOrWhiteSpace(patient.NhsNumber))
+            {
+                existingPatient = await _patientService.GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
+            }
+
+            if (existingPatient != null)
+            {
+                return Ok(await _patientService.UpdatePatient(patient, cancellationToken));
+            }
+
+            // Still need to wrap this in a try/catch.  Another consumer could have created this patient since we checked.
+            Patient newPatient;
+            try
+            {
+                newPatient = await _patientService.CreatePatient(patient, cancellationToken);
+            }
+            catch (PatientAlreadyExistsException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+            return Created($"/patient/{newPatient.Id}", newPatient);
         }
 
         /// <summary>
-        /// Deletes a patient by identifier
+        /// Deletes a patient by NHS number
         /// </summary>
         [HttpDelete]
-        [Route("patient/{id}")]
-        public async Task Delete(string id, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("patient/{nhsNumber}")]
+        public async Task<ActionResult> Delete(string nhsNumber, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            bool isDeleted = await _patientService.DeletePatientByNhsNumber(nhsNumber, cancellationToken);
+
+            if (!isDeleted)
+            {
+                return NotFound($"Patient with NHS number {nhsNumber} not found.");
+            }
+
+            return NoContent();
         }
     }
 }
