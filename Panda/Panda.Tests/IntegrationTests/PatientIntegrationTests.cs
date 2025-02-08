@@ -6,13 +6,11 @@ using Panda.Services;
 using Panda.WebApi.Controllers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Panda.Services.Exceptions;
 using Panda.Tests.Builders;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Panda.Tests.IntegrationTests
 {
-    public class PatientTests
+    public class PatientIntegrationTests
     {
         private PatientController _patientController;
         private ClientPatientBuilder _clientPatientBuilder;

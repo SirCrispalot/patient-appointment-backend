@@ -12,7 +12,7 @@ using Panda.WebApi.Controllers;
 
 namespace Panda.Tests.ClientTests
 {
-    public class PatientTests
+    public class PatientClientTests
     {
         private PatientController _patientController;
         private ClientPatientBuilder _clientPatientBuilder;
