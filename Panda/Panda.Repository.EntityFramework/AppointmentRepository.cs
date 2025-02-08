@@ -78,6 +78,7 @@ namespace Panda.Repository.EntityFramework
             }
 
             appointmentToCancel.CancelledDateTime = DateTime.UtcNow;
+            appointmentToCancel.Status = AppointmentStatus.Cancelled;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 
@@ -95,6 +96,7 @@ namespace Panda.Repository.EntityFramework
             }
 
             appointmentToAttend.AttendedDateTime = DateTime.UtcNow;
+            appointmentToAttend.Status = AppointmentStatus.Attended;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 

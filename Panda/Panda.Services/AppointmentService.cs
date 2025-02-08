@@ -30,10 +30,13 @@ namespace Panda.Services
             {
                 Id = appointment.Id,
                 AppointmentDateTime = appointment.AppointmentDateTime,
-                ClinicianCode = appointment.Clinician.Code,
-                ClinicianName = appointment.Clinician.Name,
-                DepartmentCode = appointment.Department.Code,
-                DepartmentName = appointment.Department.Name,
+
+                // TODO: Add clinicians and depts
+                //ClinicianCode = appointment.Clinician.Code,
+                //ClinicianName = appointment.Clinician.Name,
+                //DepartmentCode = appointment.Department.Code,
+                //DepartmentName = appointment.Department.Name,
+
                 PatientId = appointment.Patient.Id,
                 PatientNhsNumber = appointment.Patient.NhsNumber
             };
