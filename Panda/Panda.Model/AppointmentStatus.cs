@@ -4,7 +4,6 @@
     {
         Booked = 0,
         Attended= 1,
-        Cancelled= 2,
-        Missed= 3
+        Cancelled= 2
     }
 }

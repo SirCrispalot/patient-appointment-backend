@@ -19,5 +19,8 @@ namespace Panda.Repository
         Task<bool> CancelAppointmentById(int id, CancellationToken cancellationToken);
 
         Task<bool> AttendAppointmentById(int id, CancellationToken cancellationToken);
+
+        Task<IEnumerable<Appointment>> GetMissedAppointments(DateTime fromDateTime, DateTime toDateTime,
+            string departmentCode, string clinicianCode, CancellationToken cancellationToken);
     }
 }

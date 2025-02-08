@@ -1,4 +1,5 @@
-﻿using Panda.Model;
+﻿using Panda.ClientModel;
+using Panda.Model;
 using Panda.Repository;
 using Panda.Services.Exceptions;
 using Appointment = Panda.ClientModel.Appointment;
@@ -218,6 +219,40 @@ namespace Panda.Services
             }
 
             return await _appointmentRepository.AttendAppointmentById(id, cancellationToken);
+        }
+
+        public async Task<MissedAppointmentReportResponse> GetMissedAppointments(MissedAppointmentReportRequest request, CancellationToken cancellationToken)
+        {
+            var missedAppointments = await _appointmentRepository.GetMissedAppointments(request.ReportFrom, request.ReportTo,
+                request.DepartmentCode, request.ClinicianCode, cancellationToken);
+
+            var response = new MissedAppointmentReportResponse();
+
+            response.ClinicianCode = request.ClinicianCode;
+            response.DepartmentCode = request.DepartmentCode;
+            response.ReportFrom = request.ReportFrom;
+            response.ReportTo = request.ReportTo;
+            response.Appointments = new List<Appointment>();
+
+            // TODO: AppointmentMapper
+            foreach (var appointment in missedAppointments)
+            {
+                var clientAppointment = new Appointment
+                {
+                    Id = appointment.Id,
+                    AppointmentDateTime = appointment.AppointmentDateTime,
+                    ClinicianCode = appointment.Clinician.Code,
+                    ClinicianName = appointment.Clinician.Name,
+                    DepartmentCode = appointment.Department.Code,
+                    DepartmentName = appointment.Department.Name,
+                    PatientId = appointment.Patient.Id,
+                    PatientNhsNumber = appointment.Patient.NhsNumber
+                };
+
+                response.Appointments.Add(clientAppointment);
+            }
+
+            return response;
         }
     }
 }

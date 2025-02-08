@@ -17,5 +17,8 @@ namespace Panda.Services
         Task<bool> CancelAppointmentById(int id, CancellationToken cancellationToken);
 
         Task<bool> AttendAppointmentById(int id, CancellationToken cancellationToken);
+
+        Task<MissedAppointmentReportResponse> GetMissedAppointments(MissedAppointmentReportRequest request,
+            CancellationToken cancellationToken);
     }
 }

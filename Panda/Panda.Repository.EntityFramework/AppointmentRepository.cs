@@ -104,5 +104,22 @@ namespace Panda.Repository.EntityFramework
 
             return true;
         }
+
+        public async Task<IEnumerable<Appointment>> GetMissedAppointments(DateTime fromDateTime, DateTime toDateTime, string departmentCode, string clinicianCode,
+            CancellationToken cancellationToken)
+        {
+            var missedAppointments = await _pandaDbContext
+                .Appointments
+                .Where(a =>
+                    a.AppointmentDateTime >= fromDateTime &&
+                    a.AppointmentDateTime <= toDateTime &&
+                    a.Status == AppointmentStatus.Booked &&
+                    a.AppointmentDateTime < DateTime.UtcNow &&
+                    (a.Department.Code == departmentCode || departmentCode == null) &&
+                    (a.Clinician.Code == clinicianCode || clinicianCode == null))
+                .ToListAsync(cancellationToken);
+
+            return missedAppointments;
+        }
     }
 }

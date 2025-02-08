@@ -191,5 +191,17 @@ namespace Panda.WebApi.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        /// Gets a report of missed appointments by date, department and clinician
+        /// </summary>
+        [HttpPost]
+        [Route("appointment/missed-appointment-report")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<MissedAppointmentReportResponse> GetMissedAppointments(MissedAppointmentReportRequest request, CancellationToken cancellationToken)
+        {
+            return await _appointmentService.GetMissedAppointments(request, cancellationToken);
+        }
     }
 }
