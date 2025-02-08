@@ -23,7 +23,7 @@ namespace Panda.Tests.ClientTests
         public void Setup()
         {
             var services = new ServiceCollection();
-            services.AddScoped<IPandaRepository, PandaRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());

@@ -2,16 +2,8 @@ Assumptions
 - PANDA is not the master for patient identifiers
 
 Patients
-- Create patient with POST, return 201
-- Update existing patient with PUT, return 200
-- Delete existing patient with DELETE, return 200
-- Get existing patient with GET, return 200
-- Get nonexistent patient with GET, return 404
-- Create patient with POST where identifier already exists, return 500
 - Create patient with POST where NHS number invalid, return 400
 - Create patient with POST where postcode format invalid and cannot be coerced, return 400
-- Update nonexistent patient with PUT, patient is created and returns 201
-- Delete nonexistent patient with DELETE, return 404 or 200?
 
 Appointments
 - Create appointment with POST for existing patient, return 201
@@ -26,6 +18,8 @@ Appointments
 - Delete nonexistent appointment with DELETE, return 404 or 200?
 - Cancel existing appointment with PATCH/PUT, return 200
 - Cancel nonexistent appointment with PATCH/PUT, appointment is created and cancelled and returns 201?
+- Can't cancel an attended appointment
+- Can't attend a cancelled appointment
 
 Reports
 - Get missed appointment trend data with GET, with params, return 200

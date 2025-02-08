@@ -6,16 +6,16 @@ namespace Panda.Services
 {
     public class PatientService : IPatientService
     {
-        private IPandaRepository _pandaRepository;
+        private IPatientRepository _patientRepository;
 
-        public PatientService(IPandaRepository pandaRepository)
+        public PatientService(IPatientRepository patientRepository)
         {
-            _pandaRepository = pandaRepository;
+            _patientRepository = patientRepository;
         }
 
         public async Task<Patient?> GetPatientById(int id, CancellationToken cancellationToken)
         {
-            var patient = await _pandaRepository.GetPatientById(id, cancellationToken);
+            var patient = await _patientRepository.GetPatientById(id, cancellationToken);
 
             if (patient == null)
             {
@@ -41,7 +41,7 @@ namespace Panda.Services
 
         public async Task<Patient?> GetPatientByNhsNumber(string nhsNumber, CancellationToken cancellationToken)
         {
-            var patient = await _pandaRepository.GetPatientByNhsNumber(nhsNumber, cancellationToken);
+            var patient = await _patientRepository.GetPatientByNhsNumber(nhsNumber, cancellationToken);
 
             if (patient == null)
             {
@@ -67,14 +67,14 @@ namespace Panda.Services
 
         public async Task<Patient> CreatePatient(Patient patient, CancellationToken cancellationToken)
         {
-            var existingPatient = await _pandaRepository.GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
+            var existingPatient = await _patientRepository.GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
 
             if (existingPatient != null)
             {
                 throw new PatientAlreadyExistsException(patient.NhsNumber);
             }
 
-            var newPatient = await _pandaRepository.CreatePatient(
+            var newPatient = await _patientRepository.CreatePatient(
                 patient.NhsNumber,
                 patient.DateOfBirth,
                 (Model.SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
@@ -104,7 +104,7 @@ namespace Panda.Services
 
         public async Task<Patient> UpdatePatient(Patient patient, CancellationToken cancellationToken)
         {
-            var updatedPatient = await _pandaRepository.UpdatePatientByNhsNumber(
+            var updatedPatient = await _patientRepository.UpdatePatientByNhsNumber(
                 patient.NhsNumber,
                 patient.DateOfBirth,
                 (Model.SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
@@ -134,7 +134,7 @@ namespace Panda.Services
 
         public async Task<bool> DeletePatientByNhsNumber(string nhsNumber, CancellationToken cancellationToken)
         {
-            return await _pandaRepository.DeletePatientByNhsNumber(nhsNumber, cancellationToken);
+            return await _patientRepository.DeletePatientByNhsNumber(nhsNumber, cancellationToken);
         }
     }
 }

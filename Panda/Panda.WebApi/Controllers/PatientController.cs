@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Panda.ClientModel;
-using Panda.Model;
 using Panda.Services;
 using Panda.Services.Exceptions;
 using Patient = Panda.ClientModel.Patient;

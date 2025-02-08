@@ -3,11 +3,11 @@ using Panda.Model;
 
 namespace Panda.Repository.EntityFramework
 {
-    public class PandaRepository : IPandaRepository
+    public class PatientRepository : IPatientRepository
     {
         private readonly PandaDbContext _pandaDbContext;
 
-        public PandaRepository(PandaDbContext pandaDbContext)
+        public PatientRepository(PandaDbContext pandaDbContext)
         {
             _pandaDbContext = pandaDbContext;
         }

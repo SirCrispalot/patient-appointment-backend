@@ -23,8 +23,11 @@ namespace Panda.WebApi
                     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 });
-            builder.Services.AddScoped<IPandaRepository, PandaRepository>();
+            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             builder.Services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
             builder.Services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
 
             var app = builder.Build();

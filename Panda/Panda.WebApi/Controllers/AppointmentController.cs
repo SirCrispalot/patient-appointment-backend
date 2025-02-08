@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Panda.ClientModel;
+using Panda.Services;
+using Panda.Services.Exceptions;
 
 namespace Panda.WebApi.Controllers
 {
@@ -7,10 +9,12 @@ namespace Panda.WebApi.Controllers
     public class AppointmentController : ControllerBase
     {
         private readonly ILogger<AppointmentController> _logger;
+        private IAppointmentService _appointmentService;
 
-        public AppointmentController(ILogger<AppointmentController> logger)
+        public AppointmentController(ILogger<AppointmentController> logger, IAppointmentService appointmentService)
         {
             _logger = logger;
+            _appointmentService = appointmentService;
         }
 
         /// <summary>
@@ -20,10 +24,12 @@ namespace Panda.WebApi.Controllers
         [Route("appointment/patient/{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)] TODO: Reinstate?
         public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientId(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var appointments = await _appointmentService.GetAppointmentsByPatientId(id, cancellationToken);
+
+            return Ok(appointments);
         }
 
         /// <summary>
@@ -32,10 +38,12 @@ namespace Panda.WebApi.Controllers
         [HttpGet]
         [Route("appointment/patient/nhs-number/{nhsNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)] TODO: Reinstate?
         public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientNhsNumber(string nhsNumber, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var appointments = await _appointmentService.GetAppointmentsByPatientNhsNumber(nhsNumber, cancellationToken);
+
+            return Ok(appointments);
         }
 
         /// <summary>
@@ -45,9 +53,16 @@ namespace Panda.WebApi.Controllers
         [Route("appointment/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Appointment>> Get(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<Appointment>> Get(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var appointment = await _appointmentService.GetAppointmentById(id, cancellationToken);
+
+            if (appointment == null)
+            {
+                return NotFound($"Appointment with id {id} not found.");
+            }
+
+            return Ok(appointment);
         }
 
         /// <summary>
@@ -59,7 +74,18 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Appointment>> Create(Appointment appointment, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            // TODO: Validation, maybe return 400
+            Appointment newAppointment;
+            try
+            {
+                newAppointment = await _appointmentService.CreateAppointment(appointment, cancellationToken);
+            }
+            catch (AppointmentAlreadyExistsException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+            return Created($"/appointment/{newAppointment.Id}", newAppointment);
         }
 
         /// <summary>
@@ -72,7 +98,29 @@ namespace Panda.WebApi.Controllers
         [Route("appointment/")]
         public async Task<ActionResult<Appointment>> Update(Appointment appointment, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            Appointment existingAppointment = null;
+            if (appointment.Id != 0)
+            {
+                existingAppointment = await _appointmentService.GetAppointmentById(appointment.Id, cancellationToken);
+            }
+            
+            if (existingAppointment != null)
+            {
+                return Ok(await _appointmentService.UpdateAppointment(appointment, cancellationToken));
+            }
+
+            // Still need to wrap this in a try/catch.  Another consumer could have created this patient since we checked.
+            Appointment newAppointment;
+            try
+            {
+                newAppointment = await _appointmentService.CreateAppointment(appointment, cancellationToken);
+            }
+            catch (AppointmentAlreadyExistsException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+            return Created($"/appointment/{newAppointment.Id}", newAppointment);
         }
 
         /// <summary>
@@ -82,9 +130,16 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("appointment/{id}/cancel")]
-        public async Task<ActionResult> Cancel(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Cancel(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            bool isCancelled = await _appointmentService.CancelAppointmentById(id, cancellationToken);
+
+            if (!isCancelled)
+            {
+                return NotFound($"Appointment with id {id} not found.");
+            }
+
+            return NoContent();
         }
 
         /// <summary>
@@ -94,21 +149,16 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("appointment/{id}/attend")]
-        public async Task<ActionResult> Attend(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Attend(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
+            bool isAttended = await _appointmentService.AttendAppointmentById(id, cancellationToken);
 
-        /// <summary>
-        /// Deletes an appointment by identifier
-        /// </summary>
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("appointment/{id}")]
-        public async Task<ActionResult> Delete(string id, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            if (!isAttended)
+            {
+                return NotFound($"Appointment with id {id} not found.");
+            }
+
+            return NoContent();
         }
     }
 }
