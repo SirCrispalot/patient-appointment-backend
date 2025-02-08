@@ -2,7 +2,16 @@
 {
     public class Appointment
     {
-        public string PatientIdentifier { get; set; }
-        public DateTimeOffset AppointmentDateTime { get; set; }
+        public int Id { get; set; }
+
+        public int PatientId { get; set; }
+
+        public string PatientNhsNumber { get; set; }
+
+        public DateTime AppointmentDateTime { get; set; }
+
+        public string DepartmentCode { get; set; }
+
+        public string ClinicianCode { get; set; }
     }
 }

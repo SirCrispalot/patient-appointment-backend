@@ -11,5 +11,11 @@
         public Department Department { get; set; }
 
         public Clinician Clinician { get; set; }
+
+        public DateTime? CancelledDateTime { get; set; }
+
+        public DateTime? AttendedDateTime { get; set; }
+
+        public AppointmentStatus Status { get; set; }
     }
 }

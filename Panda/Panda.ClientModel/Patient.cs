@@ -8,8 +8,10 @@
 
         public DateOnly DateOfBirth { get; set; }
 
+        // TODO: Change to string, and then map with validation
         public SexAssignedAtBirth SexAssignedAtBirth { get; set; }
 
+        // TODO: Change to string, and then map with validation
         public GenderIdentity GenderIdentity { get; set; }
 
         public string Surname { get; set; }

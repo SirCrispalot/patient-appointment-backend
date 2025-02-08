@@ -14,11 +14,38 @@ namespace Panda.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets an appointment by identifier
+        /// Gets all appointments by patient id
+        /// </summary>
+        [HttpGet]
+        [Route("appointment/patient/{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientId(int id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all appointments by patient NHS number
+        /// </summary>
+        [HttpGet]
+        [Route("appointment/patient/nhs-number/{nhsNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientNhsNumber(string nhsNumber, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets an appointment by id
         /// </summary>
         [HttpGet]
         [Route("appointment/{id}")]
-        public async Task<Appointment> Get(string id, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Appointment>> Get(string id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -28,7 +55,9 @@ namespace Panda.WebApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("appointment/")]
-        public async Task Create(Appointment appointment, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Appointment>> Create(Appointment appointment, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -37,8 +66,35 @@ namespace Panda.WebApi.Controllers
         /// Updates an existing appointment, or creates it if it does not exist
         /// </summary>
         [HttpPut]
-        [Route("appointment/{id}")]
-        public async Task Update(string id, Appointment appointment, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("appointment/")]
+        public async Task<ActionResult<Appointment>> Update(Appointment appointment, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Cancels an existing appointment
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("appointment/{id}/cancel")]
+        public async Task<ActionResult> Cancel(string id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Attends an existing appointment
+        /// </summary>
+        [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("appointment/{id}/attend")]
+        public async Task<ActionResult> Attend(string id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -47,8 +103,10 @@ namespace Panda.WebApi.Controllers
         /// Deletes an appointment by identifier
         /// </summary>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("appointment/{id}")]
-        public async Task Delete(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete(string id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
