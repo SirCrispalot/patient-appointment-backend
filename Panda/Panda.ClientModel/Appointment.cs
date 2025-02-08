@@ -17,5 +17,7 @@
         public string ClinicianCode { get; set; }
 
         public string ClinicianName { get; set; }
+
+        public string Status { get; set; }
     }
 }

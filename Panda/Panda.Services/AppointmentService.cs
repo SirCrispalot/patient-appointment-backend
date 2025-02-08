@@ -139,6 +139,7 @@ namespace Panda.Services
                 PatientNhsNumber = newAppointment.Patient.NhsNumber,
                 AppointmentDateTime = newAppointment.AppointmentDateTime,
                 Id = newAppointment.Id,
+                Status = newAppointment.Status.ToString()
             };
 
             return returnAppointment;
@@ -151,6 +152,14 @@ namespace Panda.Services
             {
                 throw new PatientDoesNotExistException(appointment.PatientNhsNumber);
             }
+
+            var existingAppointment = await _appointmentRepository.GetAppointmentById(appointment.Id, cancellationToken);
+
+            if (existingAppointment.Status == AppointmentStatus.Attended || existingAppointment.Status == AppointmentStatus.Cancelled)
+            {
+                throw new AppointmentStatusException(appointment.Id, existingAppointment.Status);
+            }
+
 
             // TODO: AppointmentMapper
             // TODO: Attend/cancel/booked behaviour
@@ -175,6 +184,7 @@ namespace Panda.Services
                 PatientNhsNumber = updatedAppointment.Patient.NhsNumber,
                 AppointmentDateTime = updatedAppointment.AppointmentDateTime,
                 Id = updatedAppointment.Id,
+                Status = updatedAppointment.Status.ToString()
             };
 
             return returnAppointment;
@@ -182,11 +192,31 @@ namespace Panda.Services
 
         public async Task<bool> CancelAppointmentById(int id, CancellationToken cancellationToken)
         {
+            var appointment = await _appointmentRepository.GetAppointmentById(id, cancellationToken);
+            if (appointment == null)
+            {
+                throw new AppointmentDoesNotExistException(id);
+            }
+            if (appointment.Status != AppointmentStatus.Booked)
+            {
+                throw new AppointmentStatusException(id, appointment.Status);
+            }
+
             return await _appointmentRepository.CancelAppointmentById(id, cancellationToken);
         }
 
         public async Task<bool> AttendAppointmentById(int id, CancellationToken cancellationToken)
         {
+            var appointment = await _appointmentRepository.GetAppointmentById(id, cancellationToken);
+            if (appointment == null)
+            {
+                throw new AppointmentDoesNotExistException(id);
+            }
+            if (appointment.Status != AppointmentStatus.Booked)
+            {
+                throw new AppointmentStatusException(id, appointment.Status);
+            }
+
             return await _appointmentRepository.AttendAppointmentById(id, cancellationToken);
         }
     }

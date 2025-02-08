@@ -58,6 +58,8 @@ namespace Panda.Repository.EntityFramework
         {
             var existingAppointment = await GetAppointmentById(appointment.Id, cancellationToken);
 
+            existingAppointment.AppointmentDateTime = appointment.AppointmentDateTime;
+
             _pandaDbContext.Entry(existingAppointment).CurrentValues.SetValues(appointment);
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);

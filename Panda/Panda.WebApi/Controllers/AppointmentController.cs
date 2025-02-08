@@ -80,6 +80,10 @@ namespace Panda.WebApi.Controllers
             {
                 newAppointment = await _appointmentService.CreateAppointment(appointment, cancellationToken);
             }
+            catch (PatientDoesNotExistException exception)
+            {
+                return BadRequest(exception.Message);
+            }
             catch (AppointmentAlreadyExistsException exception)
             {
                 return BadRequest(exception.Message);
@@ -106,7 +110,14 @@ namespace Panda.WebApi.Controllers
             
             if (existingAppointment != null)
             {
-                return Ok(await _appointmentService.UpdateAppointment(appointment, cancellationToken));
+                try
+                {
+                    return Ok(await _appointmentService.UpdateAppointment(appointment, cancellationToken));
+                }
+                catch (AppointmentStatusException exception)
+                {
+                    return BadRequest(exception.Message);
+                }
             }
 
             // Still need to wrap this in a try/catch.  Another consumer could have created this patient since we checked.
@@ -129,14 +140,21 @@ namespace Panda.WebApi.Controllers
         [HttpPatch]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("appointment/{id}/cancel")]
         public async Task<ActionResult> Cancel(int id, CancellationToken cancellationToken)
         {
-            bool isCancelled = await _appointmentService.CancelAppointmentById(id, cancellationToken);
-
-            if (!isCancelled)
+            try
             {
-                return NotFound($"Appointment with id {id} not found.");
+                await _appointmentService.CancelAppointmentById(id, cancellationToken);
+            }
+            catch (AppointmentDoesNotExistException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (AppointmentStatusException exception)
+            {
+                return BadRequest(exception.Message);
             }
 
             return NoContent();
@@ -148,10 +166,23 @@ namespace Panda.WebApi.Controllers
         [HttpPatch]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("appointment/{id}/attend")]
         public async Task<ActionResult> Attend(int id, CancellationToken cancellationToken)
         {
-            bool isAttended = await _appointmentService.AttendAppointmentById(id, cancellationToken);
+            bool isAttended;
+            try
+            {
+                isAttended = await _appointmentService.AttendAppointmentById(id, cancellationToken);
+            }
+            catch (AppointmentDoesNotExistException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (AppointmentStatusException exception)
+            {
+                return BadRequest(exception.Message);
+            }
 
             if (!isAttended)
             {
