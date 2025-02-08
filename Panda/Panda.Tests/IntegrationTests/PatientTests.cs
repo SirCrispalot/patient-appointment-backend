@@ -6,7 +6,9 @@ using Panda.Services;
 using Panda.WebApi.Controllers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Panda.Services.Exceptions;
 using Panda.Tests.Builders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Panda.Tests.IntegrationTests
 {
@@ -14,6 +16,7 @@ namespace Panda.Tests.IntegrationTests
     {
         private PatientController _patientController;
         private ClientPatientBuilder _clientPatientBuilder;
+        private PatientBuilder _patientBuilder;
         private PandaDbContext _dbContext;
 
         [SetUp]
@@ -28,6 +31,7 @@ namespace Panda.Tests.IntegrationTests
 
             _patientController = ActivatorUtilities.CreateInstance<PatientController>(provider);
             _clientPatientBuilder = new ClientPatientBuilder();
+            _patientBuilder = new PatientBuilder();
 
             _dbContext = (PandaDbContext)provider.GetService(typeof(PandaDbContext));
         }
@@ -47,7 +51,7 @@ namespace Panda.Tests.IntegrationTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
 
             // Assert
             _dbContext.Patients.Count().Should().Be(1);
@@ -61,7 +65,7 @@ namespace Panda.Tests.IntegrationTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
 
             // Assert
             _dbContext.Patients.Count().Should().Be(1);
@@ -72,23 +76,25 @@ namespace Panda.Tests.IntegrationTests
             savedPatient.Surname.Should().Be(clientPatient.Surname);
             savedPatient.MiddleNames.Should().Be(clientPatient.MiddleNames);
             savedPatient.Title.Should().Be(clientPatient.Title);
-            savedPatient.SexAssignedAtBirth.Should().Be((Model.SexAssignedAtBirth)(int)clientPatient.SexAssignedAtBirth);
+            savedPatient.SexAssignedAtBirth.Should()
+                .Be((Model.SexAssignedAtBirth)(int)clientPatient.SexAssignedAtBirth);
             savedPatient.GenderIdentity.Should().Be((Model.GenderIdentity)(int)clientPatient.GenderIdentity);
             savedPatient.DeletedDateTime.Should().BeNull();
         }
 
         [Test]
-        public async Task Given_EmptyRepository_When_CreateAndUpdatePatient_Should_UpdateExistingPatientWithCorrectData()
+        public async Task
+            Given_EmptyRepository_When_CreateAndUpdatePatient_Should_UpdateExistingPatientWithCorrectData()
         {
             // Arrange
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
 
             var newSurname = "Smith";
             clientPatient.Surname = newSurname;
-            await _patientController.Update(clientPatient, new CancellationToken(false));
+            await _patientController.Update(clientPatient, CancellationToken.None);
 
             // Assert
             _dbContext.Patients.Count().Should().Be(1);
@@ -103,13 +109,65 @@ namespace Panda.Tests.IntegrationTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
-            await _patientController.Delete(clientPatient.NhsNumber, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
+            await _patientController.Delete(clientPatient.NhsNumber, CancellationToken.None);
 
             // Assert
             _dbContext.Patients.Count().Should().Be(1);
             var savedPatient = _dbContext.Patients.Single();
             savedPatient.DeletedDateTime.Should().NotBeNull();
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_CreateSamePatientTwice_Should_NotCreateDuplicate()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+
+            // Act
+            await _patientController.Create(clientPatient, CancellationToken.None);
+            await _patientController.Create(clientPatient, CancellationToken.None);
+
+            // Assert
+            _dbContext.Patients.Count().Should().Be(1);
+            var savedPatient = _dbContext.Patients.Single();
+            savedPatient.NhsNumber.Should().Be(clientPatient.NhsNumber);
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_UpdateNonExistentPatient_Should_CreatePatientWithCorrectData()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+
+            // Act
+            await _patientController.Update(clientPatient, CancellationToken.None);
+
+            // Assert
+            _dbContext.Patients.Count().Should().Be(1);
+            var savedPatient = _dbContext.Patients.Single();
+            savedPatient.NhsNumber.Should().Be(clientPatient.NhsNumber);
+        }
+
+        [Test]
+        public async Task Given_RepositoryWithMultiplePatients_When_DeleteNonExistentPatient_Should_HaveNoEffect()
+        {
+            // Arrange
+            var patientA = _patientBuilder.CreatePatientA();
+            _dbContext.Patients.Add(patientA);
+            var patientB = _patientBuilder.CreatePatientB();
+            _dbContext.Patients.Add(patientB);
+            var patientC = _patientBuilder.CreatePatientC();
+            _dbContext.Patients.Add(patientC);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+            // Act
+            var nhsNumber = "1111111111";
+            await _patientController.Delete(nhsNumber, CancellationToken.None);
+
+            // Assert
+            _dbContext.Patients.Count().Should().Be(3);
+            _dbContext.Patients.Should().AllSatisfy(patient => { patient.DeletedDateTime.Should().BeNull(); });
         }
     }
 }

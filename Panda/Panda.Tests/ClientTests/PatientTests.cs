@@ -51,7 +51,7 @@ namespace Panda.Tests.ClientTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            var actionResult = await _patientController.Create(clientPatient, new CancellationToken(false));
+            var actionResult = await _patientController.Create(clientPatient, CancellationToken.None);
 
             // Assert
             actionResult.Result.Should().BeOfType<CreatedResult>();
@@ -68,10 +68,10 @@ namespace Panda.Tests.ClientTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
             var newSurname = "Smith";
             clientPatient.Surname = newSurname;
-            var actionResult = await _patientController.Update(clientPatient, new CancellationToken(false));
+            var actionResult = await _patientController.Update(clientPatient, CancellationToken.None);
 
             // Assert
             actionResult.Result.Should().BeOfType<OkObjectResult>();
@@ -88,8 +88,8 @@ namespace Panda.Tests.ClientTests
             var clientPatient = _clientPatientBuilder.CreateClientPatientA();
 
             // Act
-            await _patientController.Create(clientPatient, new CancellationToken(false));
-            var actionResult = await _patientController.Delete(clientPatient.NhsNumber, new CancellationToken(false));
+            await _patientController.Create(clientPatient, CancellationToken.None);
+            var actionResult = await _patientController.Delete(clientPatient.NhsNumber, CancellationToken.None);
 
             // Assert
             actionResult.Should().BeOfType<NoContentResult>();
@@ -161,6 +161,63 @@ namespace Panda.Tests.ClientTests
             // Assert
             actionResult.Result.Should().BeOfType<NotFoundObjectResult>();
             var result = (NotFoundObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<string>();
+            ((string)result.Value).Should().Be($"Patient with NHS number {nhsNumber} not found.");
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_CreateSamePatientTwice_Should_ReturnHttp400WithMessage()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+
+            // Act
+            await _patientController.Create(clientPatient, CancellationToken.None);
+            var actionResult = await _patientController.Create(clientPatient, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+            var result = (BadRequestObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<string>();
+            ((string)result.Value).Should().Be($"Patient with NHS number {clientPatient.NhsNumber} already exists");
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_UpdateNonExistentPatient_Should_ReturnHttp201WithPatient()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+
+            // Act
+            var actionResult = await _patientController.Update(clientPatient, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<CreatedResult>();
+
+            var result = (CreatedResult)actionResult.Result;
+            result.Value.Should().BeOfType<Patient>();
+            ((Patient)result.Value).NhsNumber.Should().Be(clientPatient.NhsNumber);
+        }
+
+        [Test]
+        public async Task Given_RepositoryWithMultiplePatients_When_DeleteNonExistentPatient_Should_ReturnHttp404WithMessage()
+        {
+            // Arrange
+            var patientA = _patientBuilder.CreatePatientA();
+            _dbContext.Patients.Add(patientA);
+            var patientB = _patientBuilder.CreatePatientB();
+            _dbContext.Patients.Add(patientB);
+            var patientC = _patientBuilder.CreatePatientC();
+            _dbContext.Patients.Add(patientC);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+            // Act
+            var nhsNumber = "1111111111";
+            var actionResult = await _patientController.Delete(nhsNumber, CancellationToken.None);
+
+            // Assert
+            actionResult.Should().BeOfType<NotFoundObjectResult>();
+            var result = (NotFoundObjectResult)actionResult;
             result.Value.Should().BeOfType<string>();
             ((string)result.Value).Should().Be($"Patient with NHS number {nhsNumber} not found.");
         }
