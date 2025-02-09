@@ -1,4 +1,4 @@
-﻿using Panda.ClientModel.Validators;
+﻿using Panda.WebApi.Validators;
 using FluentAssertions;
 
 namespace Panda.Tests.UnitTests

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Panda.Services;
 using Panda.Services.Exceptions;
+using Panda.WebApi.Validators;
 using Patient = Panda.ClientModel.Patient;
 
 namespace Panda.WebApi.Controllers
@@ -10,11 +11,14 @@ namespace Panda.WebApi.Controllers
     {
         private readonly ILogger<PatientController> _logger;
         private IPatientService _patientService;
+        private PatientValidator _patientValidator;
 
-        public PatientController(ILogger<PatientController> logger, IPatientService patientService)
+        public PatientController(ILogger<PatientController> logger, IPatientService patientService,
+            PatientValidator patientValidator)
         {
             _logger = logger;
             _patientService = patientService;
+            _patientValidator = patientValidator;
         }
 
         /// <summary>
@@ -66,7 +70,12 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Patient>> Create(Patient patient, CancellationToken cancellationToken)
         {
-            // TODO: Validation, maybe return 400
+            var validationResult = await _patientValidator.ValidateAsync(patient, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             Patient newPatient;
             try
             {
@@ -90,6 +99,12 @@ namespace Panda.WebApi.Controllers
         [Route("patient/")]
         public async Task<ActionResult<Patient>> Update(Patient patient, CancellationToken cancellationToken)
         {
+            var validationResult = await _patientValidator.ValidateAsync(patient, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             Patient existingPatient = null;
             if (patient.Id != 0)
             {

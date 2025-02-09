@@ -1,4 +1,4 @@
-﻿namespace Panda.ClientModel.Validators
+﻿namespace Panda.WebApi.Validators
 {
     public class NhsNumberValidator
     {

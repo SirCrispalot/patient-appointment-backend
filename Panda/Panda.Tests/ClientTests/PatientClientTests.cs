@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Panda.Repository.EntityFramework;
 using Panda.Services;
 using Panda.Tests.Builders;
 using Panda.WebApi.Controllers;
+using Panda.WebApi.Validators;
 
 namespace Panda.Tests.ClientTests
 {
@@ -25,6 +27,8 @@ namespace Panda.Tests.ClientTests
             var services = new ServiceCollection();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<PatientValidator>();
+            services.AddScoped<NhsNumberValidator>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());
             var provider = services.BuildServiceProvider();
@@ -62,6 +66,23 @@ namespace Panda.Tests.ClientTests
         }
 
         [Test]
+        public async Task Given_EmptyRepository_When_CreatePatientWithInvalidNhsNumber_Should_ReturnHttp400WithErrorMessage()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+            clientPatient.NhsNumber = "1234567889";
+
+            // Act
+            var actionResult = await _patientController.Create(clientPatient, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+            var result = (BadRequestObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<List<ValidationFailure>>();
+            ((List<ValidationFailure>)result.Value).Single().ErrorMessage.Should().Be("NHS number is not valid");
+        }
+
+        [Test]
         public async Task Given_EmptyRepository_When_CreateAndUpdatePatient_Should_ReturnHttp200WithUpdatedPatient()
         {
             // Arrange
@@ -79,6 +100,25 @@ namespace Panda.Tests.ClientTests
             var result = (OkObjectResult)actionResult.Result;
             result.Value.Should().BeOfType<Patient>();
             ((Patient)result.Value).Surname.Should().Be(newSurname);
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_UpdatePatientWithInvalidNhsNumber_Should_ReturnHttp400WithErrorMessage()
+        {
+            // Arrange
+            var clientPatient = _clientPatientBuilder.CreateClientPatientA();
+
+            // Act
+            await _patientController.Create(clientPatient, CancellationToken.None);
+            var newNhsNumber = "457845784578";
+            clientPatient.NhsNumber = newNhsNumber;
+            var actionResult = await _patientController.Update(clientPatient, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<BadRequestObjectResult>();
+            var result = (BadRequestObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<List<ValidationFailure>>();
+            ((List<ValidationFailure>)result.Value).Single().ErrorMessage.Should().Be("NHS number is not valid");
         }
 
         [Test]
