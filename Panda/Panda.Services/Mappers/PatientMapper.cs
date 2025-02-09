@@ -4,7 +4,19 @@
     {
         public Model.Patient MapFromClientPatient(ClientModel.Patient clientPatient)
         {
-            throw new NotImplementedException();
+            var patient = new Model.Patient
+            {
+                NhsNumber = clientPatient.NhsNumber,
+                DateOfBirth = clientPatient.DateOfBirth,
+                SexAssignedAtBirth = (Model.SexAssignedAtBirth)(int)clientPatient.SexAssignedAtBirth,
+                GenderIdentity = (Model.GenderIdentity)(int)clientPatient.GenderIdentity,
+                Surname = clientPatient.Surname,
+                Forename = clientPatient.Forename,
+                MiddleNames = clientPatient.MiddleNames,
+                Title = clientPatient.Title
+            };
+
+            return patient;
         }
 
         public ClientModel.Patient MapToClientPatient(Model.Patient patient)

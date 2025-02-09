@@ -53,38 +53,24 @@ namespace Panda.Services
                 throw new PatientAlreadyExistsException(patient.NhsNumber);
             }
 
-            var newPatient = await _patientRepository.CreatePatient(
-                patient.NhsNumber,
-                patient.DateOfBirth,
-                (Model.SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
-                (Model.GenderIdentity)(int)patient.GenderIdentity,
-                patient.Surname, 
-                patient.Forename, 
-                patient.MiddleNames, 
-                patient.Title, 
-                cancellationToken);
+            var mappedPatient = _patientMapper.MapFromClientPatient(patient);
 
-            var mappedPatient = _patientMapper.MapToClientPatient(newPatient);
+            var newPatient = await _patientRepository.CreatePatient(mappedPatient, cancellationToken);
 
-            return mappedPatient;
+            var returnPatient = _patientMapper.MapToClientPatient(newPatient);
+
+            return returnPatient;
         }
 
         public async Task<Patient> UpdatePatient(Patient patient, CancellationToken cancellationToken)
         {
-            var updatedPatient = await _patientRepository.UpdatePatientByNhsNumber(
-                patient.NhsNumber,
-                patient.DateOfBirth,
-                (Model.SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
-                (Model.GenderIdentity)(int)patient.GenderIdentity,
-                patient.Surname,
-                patient.Forename,
-                patient.MiddleNames,
-                patient.Title,
-                cancellationToken);
+            var mappedPatient = _patientMapper.MapFromClientPatient(patient);
 
-            var mappedPatient = _patientMapper.MapToClientPatient(updatedPatient);
+            var updatedPatient = await _patientRepository.UpdatePatientByNhsNumber(mappedPatient, cancellationToken);
 
-            return mappedPatient;
+            var returnPatient = _patientMapper.MapToClientPatient(updatedPatient);
+
+            return returnPatient;
         }
 
         public async Task<bool> DeletePatientByNhsNumber(string nhsNumber, CancellationToken cancellationToken)

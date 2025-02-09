@@ -84,16 +84,7 @@ namespace Panda.Services
                 throw new PatientDoesNotExistException(appointment.PatientNhsNumber);
             }
 
-            var mappedAppointment = new Model.Appointment
-            {
-                Patient = patient,
-                ClinicianCode = appointment.ClinicianCode,
-                DepartmentCode = appointment.DepartmentCode,
-                AppointmentDateTime = appointment.AppointmentDateTime,
-                AttendedDateTime = null,
-                CancelledDateTime = null,
-                Status = AppointmentStatus.Booked
-            };
+            var mappedAppointment = _appointmentMapper.MapFromClientAppointment(appointment, patient);
 
             var newAppointment = await _appointmentRepository.CreateAppointment(mappedAppointment, cancellationToken);
 

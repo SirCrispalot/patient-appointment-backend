@@ -24,48 +24,32 @@ namespace Panda.Repository.EntityFramework
                 cancellationToken);
         }
 
-        public async Task<Patient> CreatePatient(string nhsNumber, DateOnly dateOfBirth, SexAssignedAtBirth sexAssignedAtBirth,
-            GenderIdentity genderIdentity, string surname, string forename, string middleNames,
-            string title, CancellationToken cancellationToken)
+        public async Task<Patient> CreatePatient(Patient patient, CancellationToken cancellationToken)
         {
-            var patient = new Patient
-            {
-                NhsNumber = nhsNumber,
-                DateOfBirth = dateOfBirth,
-                SexAssignedAtBirth = sexAssignedAtBirth,
-                GenderIdentity = genderIdentity,
-                Surname = surname,
-                Forename = forename,
-                MiddleNames = middleNames,
-                Title = title
-            };
-
             _pandaDbContext.Patients.Add(patient);
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 
-            var newPatient = await GetPatientByNhsNumber(nhsNumber, cancellationToken);
+            var newPatient = await GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
 
             return newPatient;
         }
 
-        public async Task<Patient> UpdatePatientByNhsNumber(string nhsNumber, DateOnly dateOfBirth, SexAssignedAtBirth sexAssignedAtBirth,
-            GenderIdentity genderIdentity, string surname, string forename, string middleNames,
-            string title, CancellationToken cancellationToken)
+        public async Task<Patient> UpdatePatientByNhsNumber(Patient patient, CancellationToken cancellationToken)
         {
-            var existingPatient = await GetPatientByNhsNumber(nhsNumber, cancellationToken);
+            var existingPatient = await GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
 
-            existingPatient.DateOfBirth = dateOfBirth;
-            existingPatient.SexAssignedAtBirth = sexAssignedAtBirth;
-            existingPatient.GenderIdentity = genderIdentity;
-            existingPatient.Surname = surname;
-            existingPatient.Forename = forename;
-            existingPatient.MiddleNames = middleNames;
-            existingPatient.Title = title;
+            existingPatient.DateOfBirth = patient.DateOfBirth;
+            existingPatient.SexAssignedAtBirth = patient.SexAssignedAtBirth;
+            existingPatient.GenderIdentity = patient.GenderIdentity;
+            existingPatient.Surname = patient.Surname;
+            existingPatient.Forename = patient.Forename;
+            existingPatient.MiddleNames = patient.MiddleNames;
+            existingPatient.Title = patient.Title;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 
-            var updatedPatient = await GetPatientByNhsNumber(nhsNumber, cancellationToken);
+            var updatedPatient = await GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
 
             return updatedPatient;
         }
