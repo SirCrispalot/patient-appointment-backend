@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Panda.Model;
 
-namespace Panda.Repository
+namespace Panda.Repository.EntityFramework
 {
     public class PandaDbContext : DbContext
     {
@@ -14,12 +14,5 @@ namespace Panda.Repository
 
         public DbSet<Appointment> Appointments { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    //modelBuilder.Entity<Patient>(entity =>
-        //    //{
-        //    //    entity.Property(patient => patient.Id).ValueGeneratedOnAdd().HasColumnType("int").HasColumnOrder(1);
-        //    //});
-        //}
     }
 }
