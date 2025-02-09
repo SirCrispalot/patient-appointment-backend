@@ -30,6 +30,7 @@ namespace Panda.WebApi
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped<PatientValidator>();
             builder.Services.AddScoped<NhsNumberValidator>();
+            builder.Services.AddScoped<MissedAppointmentReportRequestValidator>();
 
             builder.Services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
 

@@ -2,6 +2,7 @@
 using Panda.ClientModel;
 using Panda.Services;
 using Panda.Services.Exceptions;
+using Panda.WebApi.Validators;
 
 namespace Panda.WebApi.Controllers
 {
@@ -10,11 +11,14 @@ namespace Panda.WebApi.Controllers
     {
         private readonly ILogger<AppointmentController> _logger;
         private IAppointmentService _appointmentService;
+        private MissedAppointmentReportRequestValidator _missedAppointmentReportRequestValidator;
 
-        public AppointmentController(ILogger<AppointmentController> logger, IAppointmentService appointmentService)
+        public AppointmentController(ILogger<AppointmentController> logger, IAppointmentService appointmentService,
+            MissedAppointmentReportRequestValidator missedAppointmentReportRequestValidator)
         {
             _logger = logger;
             _appointmentService = appointmentService;
+            _missedAppointmentReportRequestValidator = missedAppointmentReportRequestValidator;
         }
 
         /// <summary>
@@ -199,9 +203,16 @@ namespace Panda.WebApi.Controllers
         [Route("appointment/missed-appointment-report")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<MissedAppointmentReportResponse> GetMissedAppointments(MissedAppointmentReportRequest request, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<MissedAppointmentReportResponse>> GetMissedAppointments(MissedAppointmentReportRequest request, CancellationToken cancellationToken)
         {
-            return await _appointmentService.GetMissedAppointments(request, cancellationToken);
+            var validationResult = await _missedAppointmentReportRequestValidator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
+            return Ok(await _appointmentService.GetMissedAppointments(request, cancellationToken));
         }
     }
 }

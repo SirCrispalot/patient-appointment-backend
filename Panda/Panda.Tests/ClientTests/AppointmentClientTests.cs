@@ -10,6 +10,7 @@ using Panda.Repository.EntityFramework;
 using Panda.Services;
 using Panda.Tests.Builders;
 using Panda.WebApi.Controllers;
+using Panda.WebApi.Validators;
 using Appointment = Panda.ClientModel.Appointment;
 
 namespace Panda.Tests.ClientTests
@@ -31,6 +32,7 @@ namespace Panda.Tests.ClientTests
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<MissedAppointmentReportRequestValidator>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());
             var provider = services.BuildServiceProvider();
@@ -371,6 +373,59 @@ namespace Panda.Tests.ClientTests
             var result = (NotFoundObjectResult)actionResult;
             result.Value.Should().BeOfType<string>();
             ((string)result.Value).Should().Be($"Appointment with id {nonExistentId} does not exist");
+        }
+
+        [Test]
+        public async Task Given_EmptyRepository_When_RequestMissedAppointmentReport_Should_ReturnHttp200WithNoAppointments()
+        {
+            // Arrange
+            var request = new MissedAppointmentReportRequest();
+            request.ClinicianCode = "";
+            request.DepartmentCode = "";
+            request.ReportFrom = new DateTime(2025, 1, 10);
+            request.ReportTo = new DateTime(2025, 1, 17);
+
+            // Act
+            var actionResult = await _appointmentController.GetMissedAppointments(request, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<OkObjectResult>();
+            var result = (OkObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<MissedAppointmentReportResponse>();
+            var missedAppointmentReport = (MissedAppointmentReportResponse)result.Value;
+            ((MissedAppointmentReportResponse)result.Value).Appointments.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task Given_RepositoryWithMissedAppointment_When_RequestMissedAppointmentReport_Should_ReturnHttp200WithThatAppointment()
+        {
+            // Arrange
+            var patientA = _patientBuilder.CreatePatientA();
+            var appointmentA = _appointmentBuilder.CreateAppointmentA(patientA);
+            appointmentA.AppointmentDateTime = new DateTime(2025, 1, 12);
+            appointmentA.Status = AppointmentStatus.Booked;
+            _dbContext.Patients.Add(patientA);
+            _dbContext.Appointments.Add(appointmentA);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+
+            var request = new MissedAppointmentReportRequest();
+            request.ClinicianCode = "";
+            request.DepartmentCode = "";
+            request.ReportFrom = new DateTime(2025, 1, 10);
+            request.ReportTo = new DateTime(2025, 1, 17);
+
+            // Act
+            var actionResult = await _appointmentController.GetMissedAppointments(request, CancellationToken.None);
+
+            // Assert
+            actionResult.Result.Should().BeOfType<OkObjectResult>();
+            var result = (OkObjectResult)actionResult.Result;
+            result.Value.Should().BeOfType<MissedAppointmentReportResponse>();
+            var missedAppointmentReport = (MissedAppointmentReportResponse)result.Value;
+            missedAppointmentReport.Appointments.Should().HaveCount(1);
+            missedAppointmentReport.Appointments.Single().AppointmentDateTime.Should()
+                .Be(appointmentA.AppointmentDateTime);
         }
     }
 }

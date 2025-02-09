@@ -114,9 +114,8 @@ namespace Panda.Repository.EntityFramework
                     a.AppointmentDateTime >= fromDateTime &&
                     a.AppointmentDateTime <= toDateTime &&
                     a.Status == AppointmentStatus.Booked &&
-                    a.AppointmentDateTime < DateTime.UtcNow &&
-                    (a.DepartmentCode == departmentCode || departmentCode == null) &&
-                    (a.ClinicianCode == clinicianCode || clinicianCode == null))
+                    (string.IsNullOrWhiteSpace(departmentCode) || a.DepartmentCode == departmentCode) &&
+                    (string.IsNullOrWhiteSpace(clinicianCode) || a.ClinicianCode == clinicianCode))
                 .ToListAsync(cancellationToken);
 
             return missedAppointments;
