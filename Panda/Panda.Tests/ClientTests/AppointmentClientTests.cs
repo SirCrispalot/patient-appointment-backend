@@ -78,7 +78,7 @@ namespace Panda.Tests.ClientTests
             var result = (CreatedResult)actionResult.Result;
             result.Value.Should().BeOfType<Appointment>();
             ((Appointment)result.Value).PatientNhsNumber.Should().Be(patientA.NhsNumber);
-            ((Appointment)result.Value).Status.Should().Be(nameof(AppointmentStatus.Booked));
+            ((Appointment)result.Value).Status.Should().Be(nameof(AppointmentStatus.Active));
         }
 
         [Test]
@@ -323,7 +323,7 @@ namespace Panda.Tests.ClientTests
             var result = (CreatedResult)actionResult.Result;
             result.Value.Should().BeOfType<Appointment>();
             ((Appointment)result.Value).PatientNhsNumber.Should().Be(patientA.NhsNumber);
-            ((Appointment)result.Value).Status.Should().Be(nameof(AppointmentStatus.Booked));
+            ((Appointment)result.Value).Status.Should().Be(nameof(AppointmentStatus.Active));
         }
 
         
@@ -405,7 +405,7 @@ namespace Panda.Tests.ClientTests
             var patientA = _patientBuilder.CreatePatientA();
             var appointmentA = _appointmentBuilder.CreateAppointmentA(patientA);
             appointmentA.AppointmentDateTime = new DateTime(2025, 1, 12);
-            appointmentA.Status = AppointmentStatus.Booked;
+            appointmentA.Status = AppointmentStatus.Active;
             _dbContext.Patients.Add(patientA);
             _dbContext.Appointments.Add(appointmentA);
             await _dbContext.SaveChangesAsync(CancellationToken.None);

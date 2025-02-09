@@ -11,8 +11,8 @@ namespace Panda.Tests.Builders
                 PatientId = 1,
                 PatientNhsNumber = "8888888888",
                 AppointmentDateTime = new DateTime(2025, 6, 15),
-                ClinicianCode = "FOS",
-                DepartmentCode = "NEPH",
+                Clinician = "FOS",
+                Department = "NEPH",
             };
         }
 
@@ -23,8 +23,8 @@ namespace Panda.Tests.Builders
                 PatientId = 1,
                 PatientNhsNumber = "8888888888",
                 AppointmentDateTime = new DateTime(2025, 10, 10),
-                ClinicianCode = "DOO",
-                DepartmentCode = "DERM",
+                Clinician = "DOO",
+                Department = "DERM",
             };
         }
     }

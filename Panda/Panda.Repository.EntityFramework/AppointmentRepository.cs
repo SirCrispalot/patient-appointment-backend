@@ -112,9 +112,9 @@ namespace Panda.Repository.EntityFramework
                 .Where(a =>
                     a.AppointmentDateTime >= fromDateTime &&
                     a.AppointmentDateTime <= toDateTime &&
-                    a.Status == AppointmentStatus.Booked &&
-                    (string.IsNullOrWhiteSpace(departmentCode) || a.DepartmentCode == departmentCode) &&
-                    (string.IsNullOrWhiteSpace(clinicianCode) || a.ClinicianCode == clinicianCode))
+                    a.Status == AppointmentStatus.Active &&
+                    (string.IsNullOrWhiteSpace(departmentCode) || a.Department == departmentCode) &&
+                    (string.IsNullOrWhiteSpace(clinicianCode) || a.Clinician == clinicianCode))
                 .ToListAsync(cancellationToken);
 
             return missedAppointments;

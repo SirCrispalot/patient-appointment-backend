@@ -124,7 +124,7 @@ namespace Panda.Services
             {
                 throw new AppointmentDoesNotExistException(id);
             }
-            if (appointment.Status != AppointmentStatus.Booked)
+            if (appointment.Status != AppointmentStatus.Active)
             {
                 throw new AppointmentStatusException(id, appointment.Status);
             }
@@ -139,7 +139,7 @@ namespace Panda.Services
             {
                 throw new AppointmentDoesNotExistException(id);
             }
-            if (appointment.Status != AppointmentStatus.Booked)
+            if (appointment.Status != AppointmentStatus.Active)
             {
                 throw new AppointmentStatusException(id, appointment.Status);
             }

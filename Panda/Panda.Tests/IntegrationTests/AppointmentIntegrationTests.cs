@@ -93,10 +93,10 @@ namespace Panda.Tests.IntegrationTests
             savedAppointment.AppointmentDateTime.Should().Be(clientAppointmentA.AppointmentDateTime);
             savedAppointment.AttendedDateTime.Should().Be(null);
             savedAppointment.CancelledDateTime.Should().Be(null);
-            savedAppointment.ClinicianCode.Should().Be(clientAppointmentA.ClinicianCode);
-            savedAppointment.DepartmentCode.Should().Be(clientAppointmentA.DepartmentCode);
+            savedAppointment.Clinician.Should().Be(clientAppointmentA.Clinician);
+            savedAppointment.Department.Should().Be(clientAppointmentA.Department);
 
-            savedAppointment.Status.Should().Be(AppointmentStatus.Booked);
+            savedAppointment.Status.Should().Be(AppointmentStatus.Active);
         }
 
         [Test]
@@ -273,7 +273,7 @@ namespace Panda.Tests.IntegrationTests
             // Assert
             _dbContext.Appointments.Count().Should().Be(2);
             _dbContext.Appointments.Should().AllSatisfy(appointment => { appointment.CancelledDateTime.Should().BeNull(); });
-            _dbContext.Appointments.Should().AllSatisfy(appointment => { appointment.Status.Should().Be(AppointmentStatus.Booked); });
+            _dbContext.Appointments.Should().AllSatisfy(appointment => { appointment.Status.Should().Be(AppointmentStatus.Active); });
         }
     }
 }

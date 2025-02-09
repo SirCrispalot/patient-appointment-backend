@@ -10,12 +10,12 @@ namespace Panda.Services.Mappers
             {
                 Id = clientAppointment.Id,
                 Patient = patient,
-                ClinicianCode = clientAppointment.ClinicianCode,
-                DepartmentCode = clientAppointment.DepartmentCode,
+                Clinician = clientAppointment.Clinician,
+                Department = clientAppointment.Department,
                 AppointmentDateTime = clientAppointment.AppointmentDateTime,
                 AttendedDateTime = null,
                 CancelledDateTime = null,
-                Status = AppointmentStatus.Booked
+                Status = AppointmentStatus.Active
             };
 
             return mappedAppointment;
@@ -27,8 +27,8 @@ namespace Panda.Services.Mappers
             {
                 Id = appointment.Id,
                 AppointmentDateTime = appointment.AppointmentDateTime,
-                ClinicianCode = appointment.ClinicianCode,
-                DepartmentCode = appointment.DepartmentCode,
+                Clinician = appointment.Clinician,
+                Department = appointment.Department,
                 PatientId = appointment.Patient.Id,
                 PatientNhsNumber = appointment.Patient.NhsNumber,
                 Status = appointment.Status.ToString()
