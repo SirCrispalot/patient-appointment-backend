@@ -76,13 +76,8 @@ namespace Panda.Tests.IntegrationTests
             var savedPatient = _dbContext.Patients.Single();
             savedPatient.NhsNumber.Should().Be(clientPatient.NhsNumber);
             savedPatient.DateOfBirth.Should().Be(clientPatient.DateOfBirth);
-            savedPatient.Forename.Should().Be(clientPatient.Forename);
-            savedPatient.Surname.Should().Be(clientPatient.Surname);
-            savedPatient.MiddleNames.Should().Be(clientPatient.MiddleNames);
-            savedPatient.Title.Should().Be(clientPatient.Title);
-            savedPatient.SexAssignedAtBirth.Should()
-                .Be((Model.SexAssignedAtBirth)(int)clientPatient.SexAssignedAtBirth);
-            savedPatient.GenderIdentity.Should().Be((Model.GenderIdentity)(int)clientPatient.GenderIdentity);
+            savedPatient.Postcode.Should().Be(clientPatient.Postcode);
+            savedPatient.Name.Should().Be(clientPatient.Name);
             savedPatient.DeletedDateTime.Should().BeNull();
         }
 
@@ -97,13 +92,13 @@ namespace Panda.Tests.IntegrationTests
             await _patientController.Create(clientPatient, CancellationToken.None);
 
             var newSurname = "Smith";
-            clientPatient.Surname = newSurname;
+            clientPatient.Name = newSurname;
             await _patientController.Update(clientPatient, CancellationToken.None);
 
             // Assert
             _dbContext.Patients.Count().Should().Be(1);
             var savedPatient = _dbContext.Patients.Single();
-            savedPatient.Surname.Should().Be(newSurname);
+            savedPatient.Name.Should().Be(newSurname);
         }
 
         [Test]

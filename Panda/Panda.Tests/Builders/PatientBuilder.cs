@@ -10,12 +10,8 @@ namespace Panda.Tests.Builders
             {
                 NhsNumber = "4444444444",
                 DateOfBirth = new DateOnly(1995, 1, 1),
-                Forename = "Ada",
-                Surname = "Lovelace",
-                MiddleNames = "Matilda",
-                SexAssignedAtBirth = SexAssignedAtBirth.Female,
-                GenderIdentity = GenderIdentity.Woman,
-                Title = "Miss",
+                Postcode = "EX8 3DT",
+                Name = "Ada Lovelace",
                 DeletedDateTime = null
             };
         }
@@ -26,12 +22,8 @@ namespace Panda.Tests.Builders
             {
                 NhsNumber = "6666666666",
                 DateOfBirth = new DateOnly(1980, 12, 31),
-                Forename = "Chris",
-                Surname = "Jones",
-                MiddleNames = "Alex",
-                SexAssignedAtBirth = SexAssignedAtBirth.Male,
-                GenderIdentity = GenderIdentity.NonBinary,
-                Title = "Mx",
+                Postcode = "BS5 6PY",
+                Name = "Chris Jones",
                 DeletedDateTime = null
             };
         }
@@ -42,12 +34,8 @@ namespace Panda.Tests.Builders
             {
                 NhsNumber = "9999999999",
                 DateOfBirth = new DateOnly(1952, 11, 16),
-                Forename = "Shigeru",
-                Surname = "Miyamoto",
-                MiddleNames = "",
-                SexAssignedAtBirth = SexAssignedAtBirth.Male,
-                GenderIdentity = GenderIdentity.Man,
-                Title = "Mr",
+                Postcode = "PO6 1AZ",
+                Name = "Shigeru Miyamoto",
                 DeletedDateTime = null
             };
         }

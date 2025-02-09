@@ -93,7 +93,7 @@ namespace Panda.Tests.ClientTests
             // Act
             await _patientController.Create(clientPatient, CancellationToken.None);
             var newSurname = "Smith";
-            clientPatient.Surname = newSurname;
+            clientPatient.Name = newSurname;
             var actionResult = await _patientController.Update(clientPatient, CancellationToken.None);
 
             // Assert
@@ -101,7 +101,7 @@ namespace Panda.Tests.ClientTests
 
             var result = (OkObjectResult)actionResult.Result;
             result.Value.Should().BeOfType<Patient>();
-            ((Patient)result.Value).Surname.Should().Be(newSurname);
+            ((Patient)result.Value).Name.Should().Be(newSurname);
         }
 
         [Test]
@@ -158,7 +158,7 @@ namespace Panda.Tests.ClientTests
             var result = (OkObjectResult)actionResult.Result;
             result.Value.Should().BeOfType<Patient>();
             ((Patient)result.Value).NhsNumber.Should().Be(patientB.NhsNumber);
-            ((Patient)result.Value).Surname.Should().Be(patientB.Surname);
+            ((Patient)result.Value).Name.Should().Be(patientB.Name);
         }
 
         [Test]

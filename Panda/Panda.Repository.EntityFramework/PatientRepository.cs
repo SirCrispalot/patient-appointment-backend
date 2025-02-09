@@ -40,12 +40,8 @@ namespace Panda.Repository.EntityFramework
             var existingPatient = await GetPatientByNhsNumber(patient.NhsNumber, cancellationToken);
 
             existingPatient.DateOfBirth = patient.DateOfBirth;
-            existingPatient.SexAssignedAtBirth = patient.SexAssignedAtBirth;
-            existingPatient.GenderIdentity = patient.GenderIdentity;
-            existingPatient.Surname = patient.Surname;
-            existingPatient.Forename = patient.Forename;
-            existingPatient.MiddleNames = patient.MiddleNames;
-            existingPatient.Title = patient.Title;
+            existingPatient.Name = patient.Name;
+            existingPatient.Postcode = patient.Postcode;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 
