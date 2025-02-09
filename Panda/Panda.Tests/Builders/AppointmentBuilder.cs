@@ -9,9 +9,9 @@ namespace Panda.Tests.Builders
             return new Appointment
             {
                 Patient = patient,
-                AppointmentDateTime = new DateTime(2025, 6, 15),
-                Clinician = "FOS",
-                Department = "NEPH",
+                AppointmentDateTime = new DateTime(2025, 6, 15, 10, 30, 0),
+                Clinician = "Dr Foster",
+                Department = "Nephrology",
                 Status = AppointmentStatus.Active,
                 AttendedDateTime = null,
                 CancelledDateTime = null
@@ -23,9 +23,9 @@ namespace Panda.Tests.Builders
             return new Appointment
             {
                 Patient = patient,
-                AppointmentDateTime = new DateTime(2025, 10, 10),
-                Clinician = "FOS",
-                Department = "NEPH",
+                AppointmentDateTime = new DateTime(2025, 10, 10, 15, 0, 0),
+                Clinician = "Dr Strange",
+                Department = "Dermatology",
                 Status = AppointmentStatus.Active,
                 AttendedDateTime = null,
                 CancelledDateTime = null

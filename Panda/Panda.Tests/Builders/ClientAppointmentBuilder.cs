@@ -10,9 +10,9 @@ namespace Panda.Tests.Builders
             {
                 PatientId = 1,
                 PatientNhsNumber = "8888888888",
-                AppointmentDateTime = new DateTime(2025, 6, 15),
-                Clinician = "FOS",
-                Department = "NEPH",
+                AppointmentDateTime = new DateTime(2025, 6, 15, 10, 30, 0),
+                Clinician = "Dr Foster",
+                Department = "Nephrology",
             };
         }
 
@@ -22,9 +22,9 @@ namespace Panda.Tests.Builders
             {
                 PatientId = 1,
                 PatientNhsNumber = "8888888888",
-                AppointmentDateTime = new DateTime(2025, 10, 10),
-                Clinician = "DOO",
-                Department = "DERM",
+                AppointmentDateTime = new DateTime(2025, 10, 10, 15, 0, 0),
+                Clinician = "Dr Strange",
+                Department = "Dermatology",
             };
         }
     }
