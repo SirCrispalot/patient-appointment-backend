@@ -2,6 +2,7 @@
 using Panda.Model;
 using Panda.Repository;
 using Panda.Services.Exceptions;
+using Panda.Services.Mappers;
 using Appointment = Panda.ClientModel.Appointment;
 
 namespace Panda.Services
@@ -10,11 +11,13 @@ namespace Panda.Services
     {
         private IAppointmentRepository _appointmentRepository;
         private IPatientRepository _patientRepository;
+        private AppointmentMapper _appointmentMapper;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository, IPatientRepository patientRepository)
+        public AppointmentService(IAppointmentRepository appointmentRepository, IPatientRepository patientRepository, AppointmentMapper appointmentMapper)
         {
             _appointmentRepository = appointmentRepository;
             _patientRepository = patientRepository;
+            _appointmentMapper = appointmentMapper;
         }
 
         public async Task<Appointment?> GetAppointmentById(int id, CancellationToken cancellationToken)
@@ -26,21 +29,7 @@ namespace Panda.Services
                 return null;
             }
 
-            // TODO: AppointmentMapper
-            var clientAppointment = new Appointment
-            {
-                Id = appointment.Id,
-                AppointmentDateTime = appointment.AppointmentDateTime,
-
-                // TODO: Add clinicians and depts
-                //ClinicianCode = appointment.Clinician.Code,
-                //ClinicianName = appointment.Clinician.Name,
-                //DepartmentCode = appointment.Department.Code,
-                //DepartmentName = appointment.Department.Name,
-
-                PatientId = appointment.Patient.Id,
-                PatientNhsNumber = appointment.Patient.NhsNumber
-            };
+            var clientAppointment = _appointmentMapper.MapToClientAppointment(appointment);
 
             return clientAppointment;
         }
@@ -51,18 +40,9 @@ namespace Panda.Services
 
             var clientAppointments = new List<Appointment>();
 
-            // TODO: AppointmentMapper
             foreach (var appointment in appointments)
             {
-                var clientAppointment = new Appointment
-                {
-                    Id = appointment.Id,
-                    AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.ClinicianCode,
-                    DepartmentCode = appointment.DepartmentCode,
-                    PatientId = appointment.Patient.Id,
-                    PatientNhsNumber = appointment.Patient.NhsNumber
-                };
+                var clientAppointment = _appointmentMapper.MapToClientAppointment(appointment);
 
                 clientAppointments.Add(clientAppointment);
             }
@@ -76,18 +56,9 @@ namespace Panda.Services
 
             var clientAppointments = new List<Appointment>();
 
-            // TODO: AppointmentMapper
             foreach (var appointment in appointments)
             {
-                var clientAppointment = new Appointment
-                {
-                    Id = appointment.Id,
-                    AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.ClinicianCode,
-                    DepartmentCode = appointment.DepartmentCode,
-                    PatientId = appointment.Patient.Id,
-                    PatientNhsNumber = appointment.Patient.NhsNumber
-                };
+                var clientAppointment = _appointmentMapper.MapToClientAppointment(appointment);
 
                 clientAppointments.Add(clientAppointment);
             }
@@ -113,8 +84,6 @@ namespace Panda.Services
                 throw new PatientDoesNotExistException(appointment.PatientNhsNumber);
             }
 
-            // TODO: Call clinician and dept repos and upsert them...
-
             var mappedAppointment = new Model.Appointment
             {
                 Patient = patient,
@@ -128,16 +97,7 @@ namespace Panda.Services
 
             var newAppointment = await _appointmentRepository.CreateAppointment(mappedAppointment, cancellationToken);
 
-            // TODO: AppointmentMapper
-            // TODO: Clinician and Dept
-            var returnAppointment = new Appointment
-            {
-                PatientId = newAppointment.Patient.Id,
-                PatientNhsNumber = newAppointment.Patient.NhsNumber,
-                AppointmentDateTime = newAppointment.AppointmentDateTime,
-                Id = newAppointment.Id,
-                Status = newAppointment.Status.ToString()
-            };
+            var returnAppointment = _appointmentMapper.MapToClientAppointment(newAppointment);
 
             return returnAppointment;
         }
@@ -157,32 +117,11 @@ namespace Panda.Services
                 throw new AppointmentStatusException(appointment.Id, existingAppointment.Status);
             }
 
-
-            // TODO: AppointmentMapper
-            // TODO: Attend/cancel/booked behaviour
-            var mappedAppointment = new Model.Appointment
-            {
-                Id = appointment.Id,
-                Patient = patient,
-                ClinicianCode = appointment.ClinicianCode,
-                DepartmentCode = appointment.DepartmentCode,
-                AppointmentDateTime = appointment.AppointmentDateTime,
-                AttendedDateTime = null,
-                CancelledDateTime = null,
-                Status = AppointmentStatus.Booked
-            };
-
+            var mappedAppointment = _appointmentMapper.MapFromClientAppointment(appointment, patient);
+            
             var updatedAppointment = await _appointmentRepository.UpdateAppointmentById(mappedAppointment, cancellationToken);
 
-            // TODO: AppointmentMapper
-            var returnAppointment = new Appointment
-            {
-                PatientId = updatedAppointment.Patient.Id,
-                PatientNhsNumber = updatedAppointment.Patient.NhsNumber,
-                AppointmentDateTime = updatedAppointment.AppointmentDateTime,
-                Id = updatedAppointment.Id,
-                Status = updatedAppointment.Status.ToString()
-            };
+            var returnAppointment = _appointmentMapper.MapToClientAppointment(updatedAppointment);
 
             return returnAppointment;
         }
@@ -230,18 +169,9 @@ namespace Panda.Services
             response.ReportTo = request.ReportTo;
             response.Appointments = new List<Appointment>();
 
-            // TODO: AppointmentMapper
             foreach (var appointment in missedAppointments)
             {
-                var clientAppointment = new Appointment
-                {
-                    Id = appointment.Id,
-                    AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.ClinicianCode,
-                    DepartmentCode = appointment.DepartmentCode,
-                    PatientId = appointment.Patient.Id,
-                    PatientNhsNumber = appointment.Patient.NhsNumber
-                };
+                var clientAppointment = _appointmentMapper.MapToClientAppointment(appointment);
 
                 response.Appointments.Add(clientAppointment);
             }

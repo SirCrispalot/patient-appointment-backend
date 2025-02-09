@@ -28,7 +28,6 @@ namespace Panda.WebApi.Controllers
         [Route("appointment/patient/{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)] TODO: Reinstate?
         public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientId(int id, CancellationToken cancellationToken)
         {
             var appointments = await _appointmentService.GetAppointmentsByPatientId(id, cancellationToken);
@@ -42,7 +41,6 @@ namespace Panda.WebApi.Controllers
         [HttpGet]
         [Route("appointment/patient/nhs-number/{nhsNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)] TODO: Reinstate?
         public async Task<ActionResult<IEnumerable<Appointment>>> GetByPatientNhsNumber(string nhsNumber, CancellationToken cancellationToken)
         {
             var appointments = await _appointmentService.GetAppointmentsByPatientNhsNumber(nhsNumber, cancellationToken);
@@ -78,7 +76,8 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Appointment>> Create(Appointment appointment, CancellationToken cancellationToken)
         {
-            // TODO: Validation, maybe return 400
+            // TODO: Validation
+
             Appointment newAppointment;
             try
             {

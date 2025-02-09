@@ -8,6 +8,7 @@ using Panda.Model;
 using Panda.Repository;
 using Panda.Repository.EntityFramework;
 using Panda.Services;
+using Panda.Services.Mappers;
 using Panda.Tests.Builders;
 using Panda.WebApi.Controllers;
 using Panda.WebApi.Validators;
@@ -33,6 +34,7 @@ namespace Panda.Tests.ClientTests
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<MissedAppointmentReportRequestValidator>();
+            services.AddScoped<AppointmentMapper>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());
             var provider = services.BuildServiceProvider();

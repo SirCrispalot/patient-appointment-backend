@@ -6,6 +6,7 @@ using Panda.Services;
 using Panda.WebApi.Controllers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Panda.Services.Mappers;
 using Panda.Tests.Builders;
 using Panda.WebApi.Validators;
 
@@ -27,6 +28,7 @@ namespace Panda.Tests.IntegrationTests
             services.AddScoped<MissedAppointmentReportRequestValidator>();
             services.AddScoped<PatientValidator>();
             services.AddScoped<NhsNumberValidator>();
+            services.AddScoped<PatientMapper>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());
             var provider = services.BuildServiceProvider();

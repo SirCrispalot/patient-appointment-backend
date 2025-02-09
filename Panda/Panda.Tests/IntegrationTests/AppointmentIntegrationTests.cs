@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using FluentAssertions;
 using Panda.Model;
 using Panda.WebApi.Validators;
+using Panda.Services.Mappers;
 
 namespace Panda.Tests.IntegrationTests
 {
@@ -28,6 +29,7 @@ namespace Panda.Tests.IntegrationTests
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<MissedAppointmentReportRequestValidator>();
+            services.AddScoped<AppointmentMapper>();
             services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
             services.AddLogging(conf => conf.AddConsole());
             var provider = services.BuildServiceProvider();

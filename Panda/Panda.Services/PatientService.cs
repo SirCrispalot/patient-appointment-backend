@@ -1,16 +1,19 @@
 ﻿using Panda.ClientModel;
 using Panda.Repository;
 using Panda.Services.Exceptions;
+using Panda.Services.Mappers;
 
 namespace Panda.Services
 {
     public class PatientService : IPatientService
     {
         private IPatientRepository _patientRepository;
+        private PatientMapper _patientMapper;
 
-        public PatientService(IPatientRepository patientRepository)
+        public PatientService(IPatientRepository patientRepository, PatientMapper patientMapper)
         {
             _patientRepository = patientRepository;
+            _patientMapper = patientMapper;
         }
 
         public async Task<Patient?> GetPatientById(int id, CancellationToken cancellationToken)
@@ -22,19 +25,7 @@ namespace Panda.Services
                 return null;
             }
 
-            // TODO: PatientMapper
-            var clientPatient = new Patient
-            {
-                Id = patient.Id,
-                NhsNumber = patient.NhsNumber,
-                DateOfBirth = patient.DateOfBirth,
-                SexAssignedAtBirth = (SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
-                GenderIdentity = (GenderIdentity)(int)patient.GenderIdentity,
-                Surname = patient.Surname,
-                Forename = patient.Forename,
-                MiddleNames = patient.MiddleNames,
-                Title = patient.Title
-            };
+            var clientPatient = _patientMapper.MapToClientPatient(patient);
 
             return clientPatient;
         }
@@ -48,19 +39,7 @@ namespace Panda.Services
                 return null;
             }
 
-            // TODO: PatientMapper
-            var clientPatient = new Patient
-            {
-                Id = patient.Id,
-                NhsNumber = patient.NhsNumber,
-                DateOfBirth = patient.DateOfBirth,
-                SexAssignedAtBirth = (SexAssignedAtBirth)(int)patient.SexAssignedAtBirth,
-                GenderIdentity = (GenderIdentity)(int)patient.GenderIdentity,
-                Surname = patient.Surname,
-                Forename = patient.Forename,
-                MiddleNames = patient.MiddleNames,
-                Title = patient.Title
-            };
+            var clientPatient = _patientMapper.MapToClientPatient(patient);
 
             return clientPatient;
         }
@@ -85,19 +64,7 @@ namespace Panda.Services
                 patient.Title, 
                 cancellationToken);
 
-            // TODO: PatientMapper
-            var mappedPatient = new Patient
-            {
-                Id = newPatient.Id,
-                NhsNumber = newPatient.NhsNumber,
-                DateOfBirth = newPatient.DateOfBirth,
-                SexAssignedAtBirth = (SexAssignedAtBirth)(int)newPatient.SexAssignedAtBirth,
-                GenderIdentity = (GenderIdentity)(int)newPatient.GenderIdentity,
-                Surname = newPatient.Surname,
-                Forename = newPatient.Forename,
-                MiddleNames = newPatient.MiddleNames,
-                Title = newPatient.Title
-            };
+            var mappedPatient = _patientMapper.MapToClientPatient(newPatient);
 
             return mappedPatient;
         }
@@ -115,19 +82,7 @@ namespace Panda.Services
                 patient.Title,
                 cancellationToken);
 
-            // TODO: PatientMapper
-            var mappedPatient = new Patient
-            {
-                Id = updatedPatient.Id,
-                NhsNumber = updatedPatient.NhsNumber,
-                DateOfBirth = updatedPatient.DateOfBirth,
-                SexAssignedAtBirth = (SexAssignedAtBirth)(int)updatedPatient.SexAssignedAtBirth,
-                GenderIdentity = (GenderIdentity)(int)updatedPatient.GenderIdentity,
-                Surname = updatedPatient.Surname,
-                Forename = updatedPatient.Forename,
-                MiddleNames = updatedPatient.MiddleNames,
-                Title = updatedPatient.Title
-            };
+            var mappedPatient = _patientMapper.MapToClientPatient(updatedPatient);
 
             return mappedPatient;
         }

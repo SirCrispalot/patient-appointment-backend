@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Panda.Repository;
 using Panda.Repository.EntityFramework;
 using Panda.Services;
+using Panda.Services.Mappers;
 using Panda.WebApi.Validators;
 
 namespace Panda.WebApi
@@ -30,6 +31,8 @@ namespace Panda.WebApi
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped<PatientValidator>();
             builder.Services.AddScoped<NhsNumberValidator>();
+            builder.Services.AddScoped<PatientMapper>();
+            builder.Services.AddScoped<AppointmentMapper>();
             builder.Services.AddScoped<MissedAppointmentReportRequestValidator>();
 
             builder.Services.AddDbContext<PandaDbContext>(opt => opt.UseInMemoryDatabase("PandaDb"));
