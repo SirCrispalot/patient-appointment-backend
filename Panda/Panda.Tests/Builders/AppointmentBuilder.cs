@@ -10,10 +10,8 @@ namespace Panda.Tests.Builders
             {
                 Patient = patient,
                 AppointmentDateTime = new DateTime(2025, 6, 15),
-                //Clinician = "FOS",
-                //ClinicianName = "Dr Foster",
-                //DepartmentCode = "NEPH",
-                //DepartmentName = "Nephrology"
+                ClinicianCode = "FOS",
+                DepartmentCode = "NEPH",
                 Status = AppointmentStatus.Booked,
                 AttendedDateTime = null,
                 CancelledDateTime = null
@@ -26,10 +24,8 @@ namespace Panda.Tests.Builders
             {
                 Patient = patient,
                 AppointmentDateTime = new DateTime(2025, 10, 10),
-                //Clinician = "FOS",
-                //ClinicianName = "Dr Foster",
-                //DepartmentCode = "NEPH",
-                //DepartmentName = "Nephrology"
+                ClinicianCode = "FOS",
+                DepartmentCode = "NEPH",
                 Status = AppointmentStatus.Booked,
                 AttendedDateTime = null,
                 CancelledDateTime = null

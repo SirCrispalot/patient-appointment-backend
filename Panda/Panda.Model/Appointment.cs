@@ -8,9 +8,9 @@
 
         public DateTime AppointmentDateTime { get; set; }
 
-        public Department Department { get; set; }
+        public string DepartmentCode { get; set; }
 
-        public Clinician Clinician { get; set; }
+        public string ClinicianCode { get; set; }
 
         public DateTime? CancelledDateTime { get; set; }
 

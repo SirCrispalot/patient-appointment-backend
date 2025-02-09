@@ -58,10 +58,8 @@ namespace Panda.Services
                 {
                     Id = appointment.Id,
                     AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.Clinician.Code,
-                    ClinicianName = appointment.Clinician.Name,
-                    DepartmentCode = appointment.Department.Code,
-                    DepartmentName = appointment.Department.Name,
+                    ClinicianCode = appointment.ClinicianCode,
+                    DepartmentCode = appointment.DepartmentCode,
                     PatientId = appointment.Patient.Id,
                     PatientNhsNumber = appointment.Patient.NhsNumber
                 };
@@ -85,10 +83,8 @@ namespace Panda.Services
                 {
                     Id = appointment.Id,
                     AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.Clinician.Code,
-                    ClinicianName = appointment.Clinician.Name,
-                    DepartmentCode = appointment.Department.Code,
-                    DepartmentName = appointment.Department.Name,
+                    ClinicianCode = appointment.ClinicianCode,
+                    DepartmentCode = appointment.DepartmentCode,
                     PatientId = appointment.Patient.Id,
                     PatientNhsNumber = appointment.Patient.NhsNumber
                 };
@@ -122,8 +118,8 @@ namespace Panda.Services
             var mappedAppointment = new Model.Appointment
             {
                 Patient = patient,
-                Clinician = null,
-                Department = null,
+                ClinicianCode = appointment.ClinicianCode,
+                DepartmentCode = appointment.DepartmentCode,
                 AppointmentDateTime = appointment.AppointmentDateTime,
                 AttendedDateTime = null,
                 CancelledDateTime = null,
@@ -168,8 +164,8 @@ namespace Panda.Services
             {
                 Id = appointment.Id,
                 Patient = patient,
-                Clinician = null,
-                Department = null,
+                ClinicianCode = appointment.ClinicianCode,
+                DepartmentCode = appointment.DepartmentCode,
                 AppointmentDateTime = appointment.AppointmentDateTime,
                 AttendedDateTime = null,
                 CancelledDateTime = null,
@@ -241,10 +237,8 @@ namespace Panda.Services
                 {
                     Id = appointment.Id,
                     AppointmentDateTime = appointment.AppointmentDateTime,
-                    ClinicianCode = appointment.Clinician.Code,
-                    ClinicianName = appointment.Clinician.Name,
-                    DepartmentCode = appointment.Department.Code,
-                    DepartmentName = appointment.Department.Name,
+                    ClinicianCode = appointment.ClinicianCode,
+                    DepartmentCode = appointment.DepartmentCode,
                     PatientId = appointment.Patient.Id,
                     PatientNhsNumber = appointment.Patient.NhsNumber
                 };

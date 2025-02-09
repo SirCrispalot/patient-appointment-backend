@@ -89,12 +89,8 @@ namespace Panda.Tests.IntegrationTests
             savedAppointment.AppointmentDateTime.Should().Be(clientAppointmentA.AppointmentDateTime);
             savedAppointment.AttendedDateTime.Should().Be(null);
             savedAppointment.CancelledDateTime.Should().Be(null);
-
-            // TODO: Fix clinicians and departments
-            //savedAppointment.Clinician.Code.Should().Be(clientAppointmentA.ClinicianCode);
-            //savedAppointment.Clinician.Name.Should().Be(clientAppointmentA.ClinicianName);
-            //savedAppointment.Department.Code.Should().Be(clientAppointmentA.DepartmentCode);
-            //savedAppointment.Department.Name.Should().Be(clientAppointmentA.DepartmentName);
+            savedAppointment.ClinicianCode.Should().Be(clientAppointmentA.ClinicianCode);
+            savedAppointment.DepartmentCode.Should().Be(clientAppointmentA.DepartmentCode);
 
             savedAppointment.Status.Should().Be(AppointmentStatus.Booked);
         }

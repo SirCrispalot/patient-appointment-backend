@@ -12,9 +12,7 @@ namespace Panda.Tests.Builders
                 PatientNhsNumber = "8888888888",
                 AppointmentDateTime = new DateTime(2025, 6, 15),
                 ClinicianCode = "FOS",
-                ClinicianName = "Dr Foster",
                 DepartmentCode = "NEPH",
-                DepartmentName = "Nephrology"                
             };
         }
 
@@ -26,9 +24,7 @@ namespace Panda.Tests.Builders
                 PatientNhsNumber = "8888888888",
                 AppointmentDateTime = new DateTime(2025, 10, 10),
                 ClinicianCode = "DOO",
-                ClinicianName = "Dr Dolittle",
                 DepartmentCode = "DERM",
-                DepartmentName = "Dermatology"
             };
         }
     }
