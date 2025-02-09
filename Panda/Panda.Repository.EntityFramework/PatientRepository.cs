@@ -78,19 +78,10 @@ namespace Panda.Repository.EntityFramework
             if (patientToDelete == null)
             {
                 return false;
-            }
-
-            // TODO: Decide whether we're hard or soft deleting
-            var softDelete = true;
-
-            if (softDelete)
-            {
-                patientToDelete.DeletedDateTime = DateTime.Now;
-            }
-            else
-            {
-                _pandaDbContext.Patients.Remove(patientToDelete);
-            }
+            } 
+            
+            // TODO: Assumption made that we are soft deleting patients, because you can't just delete clinical data.  Check retention requirements with business.
+            patientToDelete.DeletedDateTime = DateTime.Now;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 

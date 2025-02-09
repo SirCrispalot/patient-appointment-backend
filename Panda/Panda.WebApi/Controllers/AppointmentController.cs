@@ -76,7 +76,7 @@ namespace Panda.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Appointment>> Create(Appointment appointment, CancellationToken cancellationToken)
         {
-            // TODO: Validation
+            // TODO: Appointment validation has not yet been built. See PatientController.Create() for example of how FluentValidation would be used.
 
             Appointment newAppointment;
             try

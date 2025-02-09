@@ -13,6 +13,8 @@ namespace Panda.WebApi.Validators
 
             RuleFor(patient => patient.NhsNumber).NotEmpty();
             RuleFor(patient => patient.NhsNumber).Must(BeAValidNhsNumber).WithMessage("NHS number is not valid");
+            
+            //TODO: This is just an example of validation rules.  More clearly need to be implemented.
         }
 
         private bool BeAValidNhsNumber(string nhsNumber)

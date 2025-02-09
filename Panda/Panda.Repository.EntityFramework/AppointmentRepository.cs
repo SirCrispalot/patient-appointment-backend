@@ -18,7 +18,7 @@ namespace Panda.Repository.EntityFramework
                 cancellationToken);
         }
 
-        // TODO: Assumption that patient can only have one appointment at a given time, but check with business
+        // TODO: Assumption made that patient can only have one appointment at a given time. Check rules with business.
         public async Task<Appointment?> GetAppointmentByPatientNhsNumberAndDateTime(string nhsNumber,
             DateTime appointmentDateTime,
             CancellationToken cancellationToken)
@@ -53,7 +53,6 @@ namespace Panda.Repository.EntityFramework
             return newAppointment;
         }
 
-        // TODO: Does this work?!
         public async Task<Appointment> UpdateAppointmentById(Appointment appointment, CancellationToken cancellationToken)
         {
             var existingAppointment = await GetAppointmentById(appointment.Id, cancellationToken);

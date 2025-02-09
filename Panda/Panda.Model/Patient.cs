@@ -1,7 +1,5 @@
 ﻿namespace Panda.Model
 {
-    // TODO: Clearly there are other fields we may wish to capture for this system.
-    // However, without further requirements I would be guessing, so have captured the basics to demonstrate the functionality.
     public class Patient
     {
         public int Id { get; set; }
@@ -25,5 +23,7 @@
         public IList<Appointment> Appointments { get; set; }
 
         public DateTime? DeletedDateTime { get; set; }
+
+        // TODO: Clearly this is not a fully comprehensive list of fields.  Check with business what is required.
     }
 }
