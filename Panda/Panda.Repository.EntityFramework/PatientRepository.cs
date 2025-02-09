@@ -61,7 +61,7 @@ namespace Panda.Repository.EntityFramework
             } 
             
             // TODO: Assumption made that we are soft deleting patients, because you can't just delete clinical data.  Check retention requirements with business.
-            patientToDelete.DeletedDateTime = DateTime.Now;
+            patientToDelete.DeletedDateTime = DateTime.UtcNow;
 
             await _pandaDbContext.SaveChangesAsync(cancellationToken);
 
